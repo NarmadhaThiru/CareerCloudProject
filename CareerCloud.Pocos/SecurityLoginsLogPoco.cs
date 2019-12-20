@@ -7,7 +7,7 @@ using System.Text;
 namespace CareerCloud.Pocos
 {
     [Table("Security_Logins_Log")]
-    class SecurityLoginsLogPoco : IPoco
+    public class SecurityLoginsLogPoco : IPoco
     {
         [Key]
         public Guid Id { get; set; }

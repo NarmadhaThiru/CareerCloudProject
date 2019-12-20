@@ -6,8 +6,8 @@ using System.Text;
 
 namespace CareerCloud.Pocos
 {
-    [Table("System_Language_Codes")] 
-    class SystemLanguageCodePoco
+    [Table("System_Language_Codes")]
+    public class SystemLanguageCodePoco
     {
         [Key]
         public string LanguageID { get; set; }

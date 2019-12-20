@@ -6,8 +6,8 @@ using System.Text;
 
 namespace CareerCloud.Pocos
 {
-    [Table("System_Country_Codes")] 
-    class SystemCountryCodePoco
+    [Table("System_Country_Codes")]
+    public class SystemCountryCodePoco
     {
         [Key]
         public string Code { get; set; }
