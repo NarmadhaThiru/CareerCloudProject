@@ -34,6 +34,21 @@ namespace CareerCloud.BusinessLogicLayer
                     exceptions.Add(new ValidationException(109, "That's wierd"));
                 }
             }
+            if(exceptions.Count > 0)
+            {
+                throw new AggregateException(exceptions);
+            }
+        }
+        public override void Add(ApplicantEducationPoco[] pocos)
+        {
+            Verify(pocos);
+            base.Add(pocos);
+        }
+
+        public override void Update(ApplicantEducationPoco[] pocos)
+        {
+            Verify(pocos);
+            base.Update(pocos);
         }
     }
 }
