@@ -29,37 +29,45 @@ namespace CareerCloud.EntityFrameworkDataAccess
         {
             throw new NotImplementedException();
         }
-        
-        public IList<T> GetAll(params Expression<Func<T, object>>[] navigationProperties)
+        private IQueryable<T> GetRelatedRecord(params Expression<Func<T, object>>[] navigationProperties)
         {
             IQueryable<T> joinQuery = _currentcontext.Set<T>();
-            foreach(Expression<Func<T,object>> property in navigationProperties)
+            foreach (Expression<Func<T, object>> property in navigationProperties)
             {
                 joinQuery = joinQuery.Include<T, object>(property);
             }
-
+            return joinQuery;
+        }
+        public IList<T> GetAll(params Expression<Func<T, object>>[] navigationProperties)
+        {
+            //IQueryable<T> joinQuery = _currentcontext.Set<T>();
+            //foreach(Expression<Func<T,object>> property in navigationProperties)
+            //{
+            //    joinQuery = joinQuery.Include<T, object>(property);
+            //}
+            IQueryable<T> dbQuery = GetRelatedRecord(navigationProperties);
             return dbQuery.ToList<T>();
         }
 
         public IList<T> GetList(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] navigationProperties)
         {
-            IQueryable<T> joinQuery = _currentcontext.Set<T>();
-            foreach (Expression<Func<T, object>> property in navigationProperties)
-            {
-                joinQuery = joinQuery.Include<T, object>(property);
-            }
-
+            //    IQueryable<T> joinQuery = _currentcontext.Set<T>();
+            //    foreach (Expression<Func<T, object>> property in navigationProperties)
+            //    {
+            //        joinQuery = joinQuery.Include<T, object>(property);
+            //    }
+            IQueryable<T> dbQuery = GetRelatedRecord(navigationProperties);
             return dbQuery.Where(where).ToList<T>();
         }
 
         public T GetSingle(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] navigationProperties)
         {
-            IQueryable<T> joinQuery = _currentcontext.Set<T>();
-            foreach (Expression<Func<T, object>> property in navigationProperties)
-            {
-                joinQuery = joinQuery.Include<T, object>(property);
-            }
-
+            //IQueryable<T> joinQuery = _currentcontext.Set<T>();
+            //foreach (Expression<Func<T, object>> property in navigationProperties)
+            //{
+            //    joinQuery = joinQuery.Include<T, object>(property);
+            //}
+            IQueryable<T> dbQuery = GetRelatedRecord(navigationProperties);
             return dbQuery.Where(where).FirstOrDefault();
         }
 
