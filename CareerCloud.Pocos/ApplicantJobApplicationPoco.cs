@@ -16,6 +16,10 @@ namespace CareerCloud.Pocos
         [Column("Application_Date")]
         public DateTime ApplicationDate { get; set; }
         [Column("Time_Stamp")]
+        [NotMapped]
         public Byte[] TimeStamp { get; set; }
+
+        public virtual ApplicantProfilePoco ApplicantJobToProfile { get; set; }
+        public virtual CompanyJobPoco ApplicantJobToCompanyJob { get; set; }
     }
 }
