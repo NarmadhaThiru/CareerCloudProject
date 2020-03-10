@@ -2,63 +2,77 @@
 using CareerCloud.Pocos;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace CareerCloud.BusinessLogicLayer
 {
     public class SystemLanguageCodeLogic
     {
-        public SystemLanguageCodeLogic(IDataRepository<SystemLanguageCodePoco> repository) 
-        { }
-
-        protected void Verify(SystemLanguageCodePoco[] pocos)
+        protected IDataRepository<SystemLanguageCodePoco> _repository;
+        private enum Language_Error_Code
         {
+            Empty_Lang_ID = 1000,
+            Empty_Lang_Name = 1001,
+            Empty_Native_Name = 1002
+        }
+        public SystemLanguageCodeLogic(IDataRepository<SystemLanguageCodePoco> repository)
+        {
+            _repository = repository;
+        }
 
-            List<ValidationException> exceptions = new List<ValidationException>();
-
+        public void Verify(SystemLanguageCodePoco[] pocos)
+        {
+            List<ValidationException> exceptionslist = new List<ValidationException>();
             foreach (SystemLanguageCodePoco poco in pocos)
             {
                 if (string.IsNullOrEmpty(poco.LanguageID))
                 {
-                    exceptions.Add(new ValidationException(1000, "Required"));
+                    exceptionslist.Add(new ValidationException((int)Language_Error_Code.Empty_Lang_ID,
+                        $"Language ID {poco.LanguageID} cannot be empty"));
                 }
                 if (string.IsNullOrEmpty(poco.Name))
                 {
-                    exceptions.Add(new ValidationException(1001, "Required"));
+                    exceptionslist.Add(new ValidationException((int)Language_Error_Code.Empty_Lang_Name,
+                        $"Language Name {poco.Name} cannot be empty"));
                 }
                 if (string.IsNullOrEmpty(poco.NativeName))
                 {
-                    exceptions.Add(new ValidationException(1002, "Required "));
+                    exceptionslist.Add(new ValidationException((int)Language_Error_Code.Empty_Native_Name,
+                        $"Language Native Name {poco.NativeName} cannot be empty"));
+
                 }
             }
-            if (exceptions.Count > 0)
+            if (exceptionslist.Count > 0)
             {
-                throw new AggregateException(exceptions);
+                throw new AggregateException(exceptionslist);
             }
         }
+
+        public SystemLanguageCodePoco Get(string LID)
+        {
+            return _repository.GetSingle(c => c.LanguageID == LID);
+        }
+
+        public List<SystemLanguageCodePoco> GetAll()
+        {
+            return _repository.GetAll().ToList();
+        }
+
         public void Add(SystemLanguageCodePoco[] pocos)
         {
             Verify(pocos);
-            Add(pocos);
-            /*IDataRepository<SystemLanguageCodePoco>.Add(pocos);*/
+            _repository.Add(pocos);
         }
 
         public void Update(SystemLanguageCodePoco[] pocos)
         {
             Verify(pocos);
-            Update(pocos);
+            _repository.Update(pocos);
         }
-        public void Get(SystemLanguageCodePoco[] pocos)
-        {
-            Get(pocos);
-        }
-        public void GetAll(SystemLanguageCodePoco[] pocos)
-        {
-            GetAll(pocos);
-        }
+
         public void Delete(SystemLanguageCodePoco[] pocos)
         {
-
+            _repository.Remove(pocos);
         }
     }
 }

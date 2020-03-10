@@ -28,7 +28,11 @@ namespace CareerCloud.EntityFrameworkDataAccess
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionStr = SqlConnection();
+            var config = new ConfigurationBuilder();
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
+            config.AddJsonFile(path, false);
+            var root = config.Build();
+            string connectionStr = root.GetSection("ConnectionStrings").GetSection("DataConnection").Value;
             optionsBuilder.UseSqlServer(connectionStr);
             base.OnConfiguring(optionsBuilder);
         }
@@ -149,14 +153,6 @@ namespace CareerCloud.EntityFrameworkDataAccess
                 });
 
             base.OnModelCreating(modelBuilder);
-        }
-        private string SqlConnection()
-        {
-            var config = new ConfigurationBuilder();
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
-            config.AddJsonFile(path, false);
-            var root = config.Build();
-            return root.GetSection("ConnectionStrings").GetSection("DataConnection").Value;
         }
     }
 }
