@@ -7,6 +7,10 @@ namespace CareerCloud.EntityFrameworkDataAccess
 {
     public class CareerCloudContext : DbContext
     {
+        public CareerCloudContext(DbContextOptions<CareerCloudContext> options): base(options)
+        {
+
+        }
         public DbSet<ApplicantEducationPoco> ApplicantEducations { get; set; }
         public DbSet<ApplicantJobApplicationPoco> ApplicantJobApplications { get; set; }
         public DbSet<ApplicantProfilePoco> ApplicantProfiles { get; set; }
